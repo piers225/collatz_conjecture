@@ -1,0 +1,11 @@
+FROM ubuntu:latest
+
+# Update the package manager and install necessary dependencies
+RUN apt-get update -y && \
+    apt-get install -y \
+    gdb \
+    build-essential \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app

@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+    c-plus-plus:
+      build: 
+        context: .
+        dockerfile: DockerFile
+      volumes:
+        - ../:/app
+      environment:
+        - TZ=UTC
+      tty: true

@@ -1,0 +1,16 @@
+{
+    "name": "C++ Development",
+    "dockerComposeFile": [
+      "docker-compose.yml"
+    ],
+    "service": "c-plus-plus",
+    "workspaceFolder": "/app",
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+      "ms-vscode.cpptools"
+    ],
+    "forwardPorts": [3000]
+}
+  
