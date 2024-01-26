@@ -32,7 +32,7 @@ void freeMemory(struct Node *head)
     }
 }
 
-void filePrintNodes(FILE *file, struct Node *head, int number) 
+void filePrintNodes(FILE *file, struct Node *head, long number) 
 {
     fprintf(file, "%ld -", number);
     struct Node *current = head;
