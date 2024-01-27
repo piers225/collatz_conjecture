@@ -21,16 +21,6 @@ bool containsValue(struct Node *head, long targetValue)
     }
     return false; 
 }
-
-int lastNumber(struct Node *head)
-{
-    struct Node *current = head;
-    while (current != NULL) 
-    {
-        current = current->next;
-    }
-    return current->value; 
-}
  
 void freeMemory(struct Node *head) 
 {
@@ -57,45 +47,46 @@ void filePrintNodes(struct Node *head, long number)
     fclose(file);
 }
 
-bool collatzConjecture(struct Node *head, struct Node *previous, long startNumber) 
+struct Node* createNode(long value)
 {
-    struct Node *current = (struct Node *)malloc(sizeof(struct Node));
-    current->next = NULL;
+    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+    node->next = NULL;
+    node->value = value;
+    return node;
+}
+
+bool collatzConjecture(struct Node* head, struct Node* previous, long startNumber) 
+{
     long value = (previous->value & 1) == 0 ?
         previous->value / 2 :
         3 * previous->value + 1;
-    current->value = value;
 
-    if (value == 1) 
-    {
-        previous->next = current;
-        return true;
-    }
+    struct Node* current = createNode(value);
 
-    if (value > 1 && value < startNumber) 
+    while (value < 1 || value >= startNumber)
     {
+        if (containsValue(head, value) == true)
+        {
+            previous->next = current;
+            return false;
+        }
         previous->next = current;
-        return true;
-    }
-
-    if (containsValue(head, value))
-    {
-        previous->next = current;
-        return false;
+        previous = current;
+        value = (previous->value & 1) == 0 ?
+            previous->value / 2 :
+            3 * previous->value + 1;
+        current = createNode(value);
     }
 
     previous->next = current;
-
-    return collatzConjecture(head, current, startNumber);
-    
+    return true;
 }
  
 int main() 
 {
     const int MAX_ITERATIONS = 9999999;
-    struct Node *head = (struct Node *)malloc(sizeof(struct Node));
-    head->next = NULL;
-    for (long  number = 1; number < MAX_ITERATIONS; number++)
+    struct Node *head = createNode(0);
+    for (long  number = 2; number < MAX_ITERATIONS; number++)
     {
         head->value = number;
         bool result = collatzConjecture(head, head, number);
