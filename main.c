@@ -8,7 +8,7 @@ struct Node
     struct Node *next; 
 };
 
-bool containsValue(struct Node *head, long  targetValue) 
+bool containsValue(struct Node *head, long targetValue) 
 {
     struct Node *current = head;
     while (current != NULL) 
@@ -20,6 +20,16 @@ bool containsValue(struct Node *head, long  targetValue)
         current = current->next;
     }
     return false; 
+}
+
+int lastNumber(struct Node *head)
+{
+    struct Node *current = head;
+    while (current != NULL) 
+    {
+        current = current->next;
+    }
+    return current->value; 
 }
  
 void freeMemory(struct Node *head) 
@@ -33,8 +43,9 @@ void freeMemory(struct Node *head)
     }
 }
 
-void filePrintNodes(FILE *file, struct Node *head, long number) 
+void filePrintNodes(struct Node *head, long number) 
 {
+    FILE *file = fopen("output.txt", "w");
     fprintf(file, "%ld -", number);
     struct Node *current = head;
     while (current != NULL) 
@@ -43,54 +54,62 @@ void filePrintNodes(FILE *file, struct Node *head, long number)
         current = current->next;
     }
     fprintf(file, "\n");
+    fclose(file);
 }
 
-void collatzConjecture(struct Node *head, struct Node *previous) 
+bool collatzConjecture(struct Node *head, struct Node *previous, long startNumber) 
 {
     struct Node *current = (struct Node *)malloc(sizeof(struct Node));
     current->next = NULL;
-    if (previous->value % 2 == 0) 
-    {
-        current->value = previous->value / 2;
-    }
-    else 
-    {
-        current->value = 3 * previous->value + 1;
-    }
+    long value = (previous->value & 1) == 0 ?
+        previous->value / 2 :
+        3 * previous->value + 1;
+    current->value = value;
 
-    if (containsValue(head, current->value))
+    if (value == 1) 
     {
         previous->next = current;
-        return;
+        return true;
+    }
+
+    if (value > 1 && value < startNumber) 
+    {
+        previous->next = current;
+        return true;
+    }
+
+    if (containsValue(head, value))
+    {
+        previous->next = current;
+        return false;
     }
 
     previous->next = current;
 
-    if (current->value != 1) 
-    {
-        collatzConjecture(head, current);
-    }
+    return collatzConjecture(head, current, startNumber);
+    
 }
  
 int main() 
 {
-    FILE *file = fopen("output.txt", "w");
-    const int MAX_ITERATIONS = 999999;
-    for (long  number = 2; number < MAX_ITERATIONS; number++)
+    const int MAX_ITERATIONS = 9999999;
+    struct Node *head = (struct Node *)malloc(sizeof(struct Node));
+    head->next = NULL;
+    for (long  number = 1; number < MAX_ITERATIONS; number++)
     {
-        struct Node *head = (struct Node *)malloc(sizeof(struct Node));
         head->value = number;
-        collatzConjecture(head, head);
-        if (containsValue(head, 1) == false)
+        bool result = collatzConjecture(head, head, number);
+        if (result == false)
         {
-            filePrintNodes(file, head, number);
+            filePrintNodes(head, number);
+            break;
         }
-        freeMemory(head);
+        freeMemory(head->next);
+        head->next = NULL;
         double percentage = ((double)number / MAX_ITERATIONS) * 100;
         printf("Percentage Completion: %.2f%%\r", percentage);
         fflush(stdout);
     }
-    fclose(file);
     printf("\nComplete\n");
     return 0;  // Exit successfully
 }
