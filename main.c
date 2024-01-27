@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct Node 
 {
@@ -7,18 +8,18 @@ struct Node
     struct Node *next; 
 };
 
-int containsValue(struct Node *head, long  targetValue) 
+bool containsValue(struct Node *head, long  targetValue) 
 {
     struct Node *current = head;
     while (current != NULL) 
     {
         if (current->value == targetValue) 
         {
-            return 1; 
+            return true; 
         }
         current = current->next;
     }
-    return 0; 
+    return false; 
 }
  
 void freeMemory(struct Node *head) 
@@ -57,7 +58,7 @@ void collatzConjecture(struct Node *head, struct Node *previous)
         current->value = 3 * previous->value + 1;
     }
 
-    if (containsValue(head, current->value) == 1)
+    if (containsValue(head, current->value))
     {
         previous->next = current;
         return;
@@ -80,7 +81,7 @@ int main()
         struct Node *head = (struct Node *)malloc(sizeof(struct Node));
         head->value = number;
         collatzConjecture(head, head);
-        if (containsValue(head, 1) == 0)
+        if (containsValue(head, 1) == false)
         {
             filePrintNodes(file, head, number);
         }
