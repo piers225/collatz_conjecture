@@ -55,47 +55,59 @@ struct Node* createNode(long value)
     return node;
 }
 
-bool collatzConjecture(struct Node* head, struct Node* previous, long startNumber) 
+bool debugCollatzConjecture(struct Node* head, long startNumber) 
 {
+    struct Node* previous = head;
     long previousValue = previous->value;
-    long value = (previousValue & 1) == 0 ? previousValue / 2 : 3 * previousValue + 1;
-    struct Node* current = createNode(value);
 
-    while (value < 1 || value >= startNumber)
+    while (previousValue < 1 || previousValue >= startNumber)
     {
+        long value = (previousValue & 1) == 0 ? previousValue >> 1 : 3 * previousValue + 1;
+        struct Node* current = createNode(value);
+
         if (containsValue(head, value) == true)
         {
-            previous->next = current;
             return false;
         }
         previous->next = current;
         previous = current;
         previousValue = previous->value;
-        value = (previousValue & 1) == 0 ? previousValue / 2 : 3 * previousValue + 1;
-        current = createNode(value);
     }
 
-    previous->next = current;
     return true;
 }
  
+bool collatzConjecture(long startNumber) 
+{
+    long previousValue = startNumber;
+
+    while (previousValue < 1 || previousValue >= startNumber)
+    {
+        previousValue = (previousValue & 1) == 0 ? previousValue >> 1 : 3 * previousValue + 1;;
+    }
+
+    return true;
+}
+
 int main() 
 {
-    const int MAX_ITERATIONS = 100000000;
-    const int START = 2;
-    struct Node *head = createNode(0);
+    const long MAX_ITERATIONS = 1000000000000;
+    const long START = 2;
+    const long PRINT_INCREMENT = (MAX_ITERATIONS / 100);
     for (long  number = START; number < MAX_ITERATIONS; number++)
     {
-        head->value = number;
-        bool result = collatzConjecture(head, head, number);
+        bool result = collatzConjecture(number);
+
         if (result == false)
         {
+            struct Node *head = createNode(number);
+            debugCollatzConjecture(head, 1);
             filePrintNodes(head, number);
+            freeMemory(head);
             break;
         }
-        freeMemory(head->next);
-        head->next = NULL;
-        if (number % 1000000 == 0)
+
+        if (number % PRINT_INCREMENT == 0)
         {
             double percentage = ((double)number / MAX_ITERATIONS) * 100;
             printf("Percentage Completion: %.2f%%\r", percentage);
