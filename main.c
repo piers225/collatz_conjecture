@@ -81,7 +81,7 @@ bool collatzConjecture(struct Node* head, struct Node* previous, long startNumbe
  
 int main() 
 {
-    const int MAX_ITERATIONS = 1000000;
+    const int MAX_ITERATIONS = 100000000;
     const int START = 2;
     struct Node *head = createNode(0);
     for (long  number = START; number < MAX_ITERATIONS; number++)
@@ -95,9 +95,12 @@ int main()
         }
         freeMemory(head->next);
         head->next = NULL;
-        double percentage = ((double)number / MAX_ITERATIONS) * 100;
-        printf("Percentage Completion: %.2f%%\r", percentage);
-        fflush(stdout);
+        if (number % 100 == 0)
+        {
+            double percentage = ((double)number / MAX_ITERATIONS) * 100;
+            printf("Percentage Completion: %.2f%%\r", percentage);
+            fflush(stdout);
+        }
     }
     printf("\nComplete\n");
     return 0;  // Exit successfully
