@@ -57,10 +57,8 @@ struct Node* createNode(long value)
 
 bool collatzConjecture(struct Node* head, struct Node* previous, long startNumber) 
 {
-    long value = (previous->value & 1) == 0 ?
-        previous->value / 2 :
-        3 * previous->value + 1;
-
+    long previousValue = previous->value;
+    long value = (previousValue & 1) == 0 ? previousValue / 2 : 3 * previousValue + 1;
     struct Node* current = createNode(value);
 
     while (value < 1 || value >= startNumber)
@@ -72,9 +70,8 @@ bool collatzConjecture(struct Node* head, struct Node* previous, long startNumbe
         }
         previous->next = current;
         previous = current;
-        value = (previous->value & 1) == 0 ?
-            previous->value / 2 :
-            3 * previous->value + 1;
+        previousValue = previous->value;
+        value = (previousValue & 1) == 0 ? previousValue / 2 : 3 * previousValue + 1;
         current = createNode(value);
     }
 
@@ -84,9 +81,10 @@ bool collatzConjecture(struct Node* head, struct Node* previous, long startNumbe
  
 int main() 
 {
-    const int MAX_ITERATIONS = 9999999;
+    const int MAX_ITERATIONS = 1000000;
+    const int START = 2;
     struct Node *head = createNode(0);
-    for (long  number = 2; number < MAX_ITERATIONS; number++)
+    for (long  number = START; number < MAX_ITERATIONS; number++)
     {
         head->value = number;
         bool result = collatzConjecture(head, head, number);
