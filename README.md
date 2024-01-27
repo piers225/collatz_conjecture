@@ -5,5 +5,5 @@ Small proof of concept of the collartz conection.
 ## Build and Run
 
 ```bash
-g++ main.c && ./a.out
+g++ -O2 main.c && ./a.out
 ```

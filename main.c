@@ -69,9 +69,15 @@ bool debugCollatzConjecture(struct Node* head, long startNumber)
         {
             return false;
         }
+
         previous->next = current;
         previous = current;
         previousValue = previous->value;
+
+        if (previousValue == 1) 
+        {
+            return true;
+        }
     }
 
     return true;
