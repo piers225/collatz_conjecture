@@ -95,7 +95,7 @@ int main()
         }
         freeMemory(head->next);
         head->next = NULL;
-        if (number % 100 == 0)
+        if (number % 1000000 == 0)
         {
             double percentage = ((double)number / MAX_ITERATIONS) * 100;
             printf("Percentage Completion: %.2f%%\r", percentage);
