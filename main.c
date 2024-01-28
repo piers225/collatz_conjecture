@@ -60,7 +60,7 @@ bool debugCollatzConjecture(struct Node* head, long startNumber)
     struct Node* previous = head;
     long previousValue = previous->value;
 
-    while (previousValue < 1 || previousValue >= startNumber)
+    while (previousValue >= startNumber || previousValue < 1)
     {
         long value = (previousValue & 1) == 0 ? previousValue >> 1 : 3 * previousValue + 1;
         struct Node* current = createNode(value);
@@ -87,9 +87,9 @@ bool collatzConjecture(long startNumber)
 {
     long previousValue = startNumber;
 
-    while (previousValue < 1 || previousValue >= startNumber)
+    while (previousValue >= startNumber || previousValue < 1)
     {
-        previousValue = (previousValue & 1) == 0 ? previousValue >> 1 : 3 * previousValue + 1;;
+        previousValue = (previousValue & 1) == 0 ? previousValue >> 1 : 3 * previousValue + 1;
     }
 
     return true;
