@@ -2,10 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "build-debug",
             "type": "shell",
             "command": "g++",
             "args": ["-g", "-o", "${workspaceFolder}/build/main.out", "${workspaceFolder}/main.c"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-production",
+            "type": "shell",
+            "command": "g++",
+            "args": ["-O2", "-o", "${workspaceFolder}/build/main.out", "${workspaceFolder}/main.c"],
             "group": {
                 "kind": "build",
                 "isDefault": true
