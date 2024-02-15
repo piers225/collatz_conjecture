@@ -3,7 +3,7 @@
     "dockerComposeFile": [
       "docker-compose.yml"
     ],
-    "service": "c-plus-plus",
+    "service": "collatz_conjecture",
     "workspaceFolder": "/app",
     "settings": {
       "terminal.integrated.shell.linux": "/bin/bash"
